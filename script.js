@@ -5,3 +5,24 @@ const transactionListEl = document.getElementById("transaction-list");
 const transactionFormEl = document.getElementById("Transaction-form");
 const descriptionEl = document.getElementById("description");
 const amountEl = document.getElementById("amount");
+
+
+const transaction = JSON.parse(localStorage.getItem("Transaction")) || [];
+
+transactionFormEl.addEventListener("submit", addTransaction);
+
+function addTransaction(e){
+    e.preventDefault()
+    console.log(e)
+
+    const description = descriptionEl.value;
+    const amount = parseFloat(amountEl.value);
+
+    transaction.push({
+        id:Date.now(),
+        description,
+        amount
+    })
+
+    localStorage.setItem("transaction",stringify(transaction))
+}
