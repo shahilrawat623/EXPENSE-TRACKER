@@ -13,7 +13,6 @@ transactionFormEl.addEventListener("submit", addTransaction);
 
 function addTransaction(e){
     e.preventDefault()
-    console.log(e)
 
     const description = descriptionEl.value.trim();
     const amount = parseFloat(amountEl.value);
@@ -34,12 +33,14 @@ function addTransaction(e){
 
 function updateTransactionList(){
     transactionListEl.innerHTML="";
-
     const sortedTransaction = [...transaction].reverse();
-    const transactionEl = createTransactionEl(transaction);
-    transactionListEl.appendChild(transactionEl);
-}
+    sortedTransaction.forEach((transaction)=>{
 
+        const transactionEl = createTransactionEl(transaction);
+        transactionListEl.appendChild(transactionEl);
+    })
+    }
+    
 function createTransactionEl(transaction){
     li = document.createElement("li");
     li.classList.add("Transaction");
@@ -47,9 +48,31 @@ function createTransactionEl(transaction){
 
     li.innerHTML=`
     <span>${transaction.description}</span>
-    <span>${transaction.value}
-      <button class="delete-btn" onclick="removeTransaction(${transaction.id})">X</button>
+    <span>${transaction.amount}
+      <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
     </span>`;
-
     return li
+}
+
+function updateSummary(){
+    const balance = transaction.reduce((acc,transaction) => acc + transaction.amount, 0);
+
+    const income = transaction.filter((transaction)=> transaction.amount > 0)
+    .reduce((acc,transaction) => acc + transaction.amount,0)
+
+    const expense = transaction.filter((transaction)=> transaction.amount < 0)
+    .reduce((acc,transaction) => acc + transaction.amount,0)
+
+
+    // update UI 
+    balanceEl.textContent = formatCurrency(balance);
+    incomeAmountEl.textContent= formatCurrency(income);
+    expenseAmountEl.textContent= formatCurrency(expense);
+}
+
+function formatCurrency(number){
+    return new Intl.NumberFormat("en-US", {
+        style:"currency",
+        currency:"USD",
+    }).format(number);
 }
