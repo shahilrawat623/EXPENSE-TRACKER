@@ -7,7 +7,7 @@ const descriptionEl = document.getElementById("description");
 const amountEl = document.getElementById("amount");
 
 
-const transaction = JSON.parse(localStorage.getItem("Transaction")) || [];
+let transaction = JSON.parse(localStorage.getItem("Transaction")) || [];
 
 transactionFormEl.addEventListener("submit", addTransaction);
 
@@ -23,7 +23,7 @@ function addTransaction(e){
         amount
     })
 
-    localStorage.setItem("transaction",JSON.stringify(transaction))
+    localStorage.setItem("Transaction",JSON.stringify(transaction))
     
     updateTransactionList();
     updateSummary();
@@ -42,7 +42,7 @@ function updateTransactionList(){
     }
     
 function createTransactionEl(transaction){
-    li = document.createElement("li");
+    const li = document.createElement("li");
     li.classList.add("Transaction");
     li.classList.add(transaction.amount > 0 ? "income" : "expense");
 
@@ -78,9 +78,9 @@ function formatCurrency(number){
 }
 
 function removeTransaction(id){
-    transaction = transaction.filter(transaction.id != id)
+    transaction = transaction.filter((transaction) => transaction.id !== id)
 
-    localStorage.setItem("transaction",JSON.stringify(transaction))
+    localStorage.setItem("Transaction",JSON.stringify(transaction))
 
     updateTransactionList();
     updateSummary();
